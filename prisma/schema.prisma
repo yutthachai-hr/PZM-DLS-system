@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  STAFF
+  MANAGER
+  ADMIN
+}
+
+enum ReportStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+}
+
+enum PaymentMethod {
+  CASH
+  QR
+  EDC
+  COUPON
+}
+
+enum Platform {
+  GRAB
+  LINEMAN
+  SHOPEE
+  FOODPANDA_OTHER
+}
+
+model Branch {
+  id        String        @id @default(cuid())
+  code      String        @unique
+  name      String
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+  users     User[]
+  reports   DailyReport[]
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  username     String        @unique
+  passwordHash String
+  role         Role          @default(STAFF)
+  active       Boolean       @default(true)
+  branchId     String?
+  branch       Branch?       @relation(fields: [branchId], references: [id])
+  createdAt    DateTime      @default(now())
+  recorded     DailyReport[] @relation("recorder")
+  approved     DailyReport[] @relation("approver")
+  auditLogs    AuditLog[]
+}
+
+model DailyReport {
+  id           String         @id @default(cuid())
+  branchId     String
+  branch       Branch         @relation(fields: [branchId], references: [id])
+  /// Business date (stored as UTC midnight of the Bangkok calendar day)
+  date         DateTime       @db.Date
+  recorderId   String
+  recorder     User           @relation("recorder", fields: [recorderId], references: [id])
+  billStart    String?
+  billEnd      String?
+  float        Decimal        @default(0) @db.Decimal(12, 2)
+  status       ReportStatus   @default(DRAFT)
+  chkZReport   Boolean        @default(false)
+  chkEdcSlip   Boolean        @default(false)
+  chkTransfer  Boolean        @default(false)
+  chkPayIn     Boolean        @default(false)
+  note         String?
+  approvedById String?
+  approvedBy   User?          @relation("approver", fields: [approvedById], references: [id])
+  approvedAt   DateTime?
+  submittedAt  DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  payments     PaymentLine[]
+  deliveries   DeliveryLine[]
+  auditLogs    AuditLog[]
+
+  @@unique([branchId, date])
+  @@index([date])
+}
+
+model PaymentLine {
+  id            String        @id @default(cuid())
+  reportId      String
+  report        DailyReport   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  method        PaymentMethod
+  posAmount     Decimal       @default(0) @db.Decimal(12, 2)
+  countedAmount Decimal       @default(0) @db.Decimal(12, 2)
+  note          String?
+
+  @@unique([reportId, method])
+}
+
+model DeliveryLine {
+  id              String      @id @default(cuid())
+  reportId        String
+  report          DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  platform        Platform
+  gross           Decimal     @default(0) @db.Decimal(12, 2)
+  net             Decimal     @default(0) @db.Decimal(12, 2)
+  orders          Int         @default(0)
+  cancelledOrders Int         @default(0)
+  cancelledAmount Decimal     @default(0) @db.Decimal(12, 2)
+  note            String?
+
+  @@unique([reportId, platform])
+}
+
+model AuditLog {
+  id        String      @id @default(cuid())
+  reportId  String
+  report    DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  action    String
+  changes   Json?
+  createdAt DateTime    @default(now())
+
+  @@index([reportId])
+}

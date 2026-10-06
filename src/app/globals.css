@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/*
+ * Pizza Mania brand tokens. Swap these values to match the official logo colours —
+ * every component reads from here.
+ */
+:root {
+  color-scheme: light;
+  --bg: #fbf6ef;          /* warm dough */
+  --card: #ffffff;
+  --card-2: #fff8f0;
+  --ink: #1c1917;         /* charcoal / wood-fired oven */
+  --ink-2: #57534e;
+  --muted: #8a827a;
+  --line: #ece4d9;
+  --brand: #d7261e;       /* tomato red */
+  --brand-ink: #b01d16;
+  --brand-soft: #fde8e6;
+  --cheese: #f5b700;
+  --cheese-soft: #fff4cc;
+  --good: #2f855a;        /* basil */
+  --good-soft: #e3f4ea;
+  --bad: #c81e1e;
+  --bad-soft: #fde8e8;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --sidebar: #1c1917;
+  --sidebar-ink: #f5f5f4;
+
+  /* chart series — validated with the dataviz palette checker (light surface) */
+  --s-instore: #d7261e;
+  --s-delivery: #2a78d6;
+  --s-grab: #1baf7a;
+  --s-lineman: #d7261e;
+  --s-shopee: #2a78d6;
+  --s-other: #eda100;
+  --grid: #efe9e1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #12100e;
+    --card: #1c1917;
+    --card-2: #231f1c;
+    --ink: #faf7f2;
+    --ink-2: #d6d0c8;
+    --muted: #a39b92;
+    --line: #2f2a26;
+    --brand: #ef4438;
+    --brand-ink: #ff6a5f;
+    --brand-soft: #3a1714;
+    --cheese: #f5b700;
+    --cheese-soft: #3a2e0a;
+    --good: #4cc38a;
+    --good-soft: #13291e;
+    --bad: #ff6b6b;
+    --bad-soft: #3a1515;
+    --warn: #f0a742;
+    --warn-soft: #3a2a10;
+    --sidebar: #0b0a09;
+    --sidebar-ink: #f5f5f4;
+    --s-instore: #e5483f;
+    --s-delivery: #3987e5;
+    --s-grab: #199e70;
+    --s-lineman: #e5483f;
+    --s-shopee: #3987e5;
+    --s-other: #c98500;
+    --grid: #2a2623;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-cheese: var(--cheese);
+  --color-cheese-soft: var(--cheese-soft);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-ink: var(--sidebar-ink);
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-kanit), var(--font-plex), ui-sans-serif, sans-serif;
+  --radius-card: 1.25rem;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* hide number spinners — amounts are typed, not clicked */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+}
