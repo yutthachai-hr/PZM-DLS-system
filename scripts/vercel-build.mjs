@@ -15,4 +15,7 @@ if (missing.length) {
 const run = (cmd) => execSync(cmd, { stdio: "inherit", env });
 run("npx prisma generate");
 run("npx prisma migrate deploy");
+// Optional first-run seed: creates branches + starter accounts if they don't exist.
+// Never overwrites existing users/passwords, so it's safe to leave set.
+if (env.SEED_PASSWORD) run("npx tsx prisma/seed.ts");
 run("npx next build");

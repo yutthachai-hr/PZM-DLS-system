@@ -55,14 +55,11 @@ npm run build && npm start -- -H 0.0.0.0
    git push -u origin main
    ```
 2. **Vercel**: เลือก Add New → Project → Import repo
-3. **Database**: ในโปรเจกต์ Vercel ไปที่ Storage → Create → **Neon** (Postgres) → Connect to project ระบบจะตั้ง `DATABASE_URL` และ `DATABASE_URL_UNPOOLED` ให้เอง (ไม่ต้องตั้ง `DIRECT_URL` เพราะ `scripts/vercel-build.mjs` จะใช้ค่า unpooled แทนให้)
-   แล้วเพิ่มเองอีกตัวเดียวใน Settings → Environment Variables:
+3. **Database**: ในโปรเจกต์ Vercel ไปที่ Storage → Create → **Prisma Postgres** หรือ **Neon** → Connect to project ระบบจะตั้ง `DATABASE_URL` ให้เอง (ไม่ต้องตั้ง `DIRECT_URL` เพราะ `scripts/vercel-build.mjs` จะใช้ค่า unpooled แทนให้)
+   แล้วเพิ่มเองใน Settings → Environment Variables:
    - `AUTH_SECRET`: สุ่มใหม่ด้วย `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
-4. กด **Deploy**: สคริปต์ `vercel-build` จะรัน `prisma migrate deploy` ให้อัตโนมัติ
-5. Seed ครั้งแรก (รันจากเครื่องตัวเองโดยชี้ไปที่ DB บน cloud):
-   ```bash
-   DATABASE_URL="<neon direct url>" SEED_PASSWORD="<รหัสชั่วคราว>" npm run seed
-   ```
+4. เพิ่ม `SEED_PASSWORD` (รหัสผ่านชั่วคราว 8 ตัวขึ้นไป) ใน Environment Variables ด้วย ตอน build ระบบจะสร้างสาขาและบัญชีเริ่มต้นให้ (ถ้าบัญชีมีอยู่แล้วจะไม่เขียนทับ)
+5. กด **Deploy** หรือ **Redeploy** ระบบจะรัน `prisma migrate deploy` และ seed ให้อัตโนมัติ
 6. เข้าระบบด้วย `admin` เปลี่ยนรหัสผ่าน แล้วเพิ่มสาขาและผู้ใช้จริงในเมนู Admin
 
 ---
