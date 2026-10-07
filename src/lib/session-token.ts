@@ -29,3 +29,22 @@ export async function decrypt(token: string | undefined): Promise<SessionPayload
     return null;
   }
 }
+
+/** Short-lived signed payloads (OAuth state, pending sign-up profile). `typ` keeps them from being swapped. */
+export async function signTemp<T extends Record<string, unknown>>(typ: string, payload: T, seconds: number) {
+  return new SignJWT({ ...payload, typ })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(`${seconds}s`)
+    .sign(key());
+}
+
+export async function verifyTemp<T>(typ: string, token: string | undefined): Promise<T | null> {
+  if (!token) return null;
+  try {
+    const { payload } = await jwtVerify(token, key(), { algorithms: ["HS256"] });
+    return payload.typ === typ ? (payload as T) : null;
+  } catch {
+    return null;
+  }
+}

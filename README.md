@@ -64,6 +64,21 @@ npm run build && npm start -- -H 0.0.0.0
 
 ---
 
+## เข้าสู่ระบบด้วย LINE และการสมัครใช้งาน
+
+- **พนักงานใหม่**: กด “สมัครใช้งาน” → ยืนยันด้วย LINE → กรอกชื่อ เบอร์มือถือ และสาขา → รอผู้จัดการอนุมัติ
+- **ผู้อนุมัติ**: แอดมินอนุมัติได้ทุกสาขา (และกำหนดสิทธิ์ได้) ผู้จัดการอนุมัติได้เฉพาะพนักงานในสาขาตัวเอง ที่เมนู **อนุมัติผู้ใช้**
+- **บัญชีเดิม** (`admin` ฯลฯ): เข้าด้วยรหัสผ่านได้เหมือนเดิม (ลิงก์เล็กใต้ปุ่ม LINE) แล้วไปที่ **โปรไฟล์ → ผูกบัญชี LINE** เพื่อใช้ LINE แทนรหัสผ่าน
+
+**ตั้งค่า LINE Login (ทำครั้งเดียว)**
+1. [LINE Developers Console](https://developers.line.biz/console/) → เลือก Provider (หรือสร้างใหม่) → **Create a new channel → LINE Login**
+2. App types: **Web app** · Email permission ไม่ต้องขอ
+3. แท็บ **LINE Login → Callback URL** ใส่ `https://pzm-dls-system.vercel.app/api/auth/line/callback` (และ `http://localhost:3000/api/auth/line/callback` ถ้าจะทดสอบในเครื่อง)
+4. คัดลอก **Channel ID** และ **Channel secret** (แท็บ Basic settings) ไปใส่ใน Vercel → Environment Variables เป็น `LINE_CHANNEL_ID` และ `LINE_CHANNEL_SECRET` แล้ว Redeploy
+5. กด **Publish** ช่องทาง (จาก Developing เป็น Published) ไม่อย่างนั้นจะเข้าได้เฉพาะบัญชีที่เป็น tester
+
+---
+
 ## คำสั่งที่ใช้บ่อย
 | คำสั่ง | ใช้ทำอะไร |
 |---|---|

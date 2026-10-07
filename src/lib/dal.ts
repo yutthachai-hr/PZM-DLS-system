@@ -11,14 +11,15 @@ export const getCurrentUser = cache(async () => {
   if (!s) return null;
   const user = await db.user.findUnique({
     where: { id: s.uid },
-    select: { id: true, name: true, username: true, role: true, branchId: true, active: true, branch: true },
+    select: { id: true, name: true, username: true, role: true, branchId: true, active: true, pending: true, branch: true, linePicture: true },
   });
-  return user?.active ? user : null;
+  return user?.active && !user.pending ? user : null;
 });
 
 export async function requireUser() {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  // a cookie may outlive its account (disabled, deleted) — clear it instead of bouncing /login ↔ /
+  if (!user) redirect((await readSession()) ? "/api/auth/logout?e=disabled" : "/login");
   return user;
 }
 

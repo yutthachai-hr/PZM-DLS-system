@@ -10,7 +10,7 @@ export function LoginForm() {
   return (
     <form action={action} className="space-y-4">
       <Field label="ชื่อผู้ใช้">
-        <Input name="username" autoComplete="username" autoCapitalize="none" required autoFocus />
+        <Input name="username" autoComplete="username" autoCapitalize="none" required />
       </Field>
       <Field label="รหัสผ่าน">
         <Input name="password" type="password" autoComplete="current-password" required />
