@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bike, FileDown, History, LayoutDashboard, PlusCircle, Store, Users } from "lucide-react";
+import { Bike, FileDown, History, LayoutDashboard, PlusCircle, Store, UserCheck, Users } from "lucide-react";
 import { cx } from "./ui";
 
 const items = [
@@ -23,9 +23,9 @@ function isActive(path: string, href: string) {
   return path.startsWith(href);
 }
 
-export function SideNav({ isAdmin }: { isAdmin: boolean }) {
+export function SideNav({ isAdmin, isManager, pendingCount }: { isAdmin: boolean; isManager: boolean; pendingCount: number }) {
   const path = usePathname();
-  const link = (it: (typeof items)[number]) => (
+  const link = (it: (typeof items)[number] & { badge?: number }) => (
     <Link
       key={it.href}
       href={it.href}
@@ -35,12 +35,19 @@ export function SideNav({ isAdmin }: { isAdmin: boolean }) {
       )}
     >
       <it.icon className="size-[18px]" strokeWidth={2} />
-      {it.label}
+      <span className="flex-1">{it.label}</span>
+      {it.badge ? <span className="min-w-5 rounded-full bg-cheese px-1.5 text-center text-xs font-bold text-ink">{it.badge}</span> : null}
     </Link>
   );
   return (
     <nav className="flex flex-col gap-1">
       {items.map(link)}
+      {isManager && (
+        <>
+          <div className="mt-5 mb-1 px-3 text-[11px] font-medium tracking-wider text-sidebar-ink/40 uppercase">ทีม</div>
+          {link({ href: "/approvals", label: "อนุมัติผู้ใช้", icon: UserCheck, badge: pendingCount })}
+        </>
+      )}
       {isAdmin && (
         <>
           <div className="mt-5 mb-1 px-3 text-[11px] font-medium tracking-wider text-sidebar-ink/40 uppercase">Admin</div>

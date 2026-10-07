@@ -1,17 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Thai, Kanit } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const display = Kanit({
-  variable: "--font-kanit",
-  subsets: ["latin", "thai"],
-  weight: ["500", "600", "700"],
-});
-
-const body = IBM_Plex_Sans_Thai({
-  variable: "--font-plex",
-  subsets: ["latin", "thai"],
-  weight: ["400", "500", "600"],
+// LINE Seed Sans TH (SIL OFL 1.1, see ./fonts/OFL.txt) — same typeface as the PZM stock system.
+const lineSeed = localFont({
+  variable: "--font-line",
+  display: "swap",
+  src: [
+    { path: "./fonts/LINESeedSansTH_W_Rg.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/LINESeedSansTH_W_Bd.woff2", weight: "700", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -25,7 +23,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="th" className={`${display.variable} ${body.variable}`}>
+    <html lang="th" className={lineSeed.variable}>
       <body className="min-h-dvh">{children}</body>
     </html>
   );

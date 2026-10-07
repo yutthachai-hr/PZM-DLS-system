@@ -91,8 +91,8 @@
   --color-warn-soft: var(--warn-soft);
   --color-sidebar: var(--sidebar);
   --color-sidebar-ink: var(--sidebar-ink);
-  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-kanit), var(--font-plex), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-line), "Noto Sans Thai", "Leelawadee UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-line), "Noto Sans Thai", "Leelawadee UI", ui-sans-serif, sans-serif;
   --radius-card: 1.25rem;
 }
 
@@ -103,7 +103,7 @@ body {
 }
 
 body {
-  font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-line), "Noto Sans Thai", "Leelawadee UI", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

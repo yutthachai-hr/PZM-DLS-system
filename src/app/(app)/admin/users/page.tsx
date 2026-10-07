@@ -12,7 +12,7 @@ export default async function UsersPage() {
   const [users, branches] = await Promise.all([
     db.user.findMany({
       orderBy: [{ active: "desc" }, { role: "desc" }, { name: "asc" }],
-      select: { id: true, name: true, username: true, role: true, branchId: true, active: true, branch: { select: { name: true } } },
+      select: { id: true, name: true, username: true, role: true, branchId: true, active: true, pending: true, phone: true, lineUserId: true, branch: { select: { name: true } } },
     }),
     db.branch.findMany({ where: { active: true }, select: { id: true, name: true }, orderBy: { name: "asc" } }),
   ]);
@@ -38,6 +38,11 @@ export default async function UsersPage() {
                     <div className="text-xs text-muted">
                       @{u.username} · {ROLE_LABEL[u.role]} · {u.branch?.name ?? "ทุกสาขา"}
                       {!u.active && " · ปิดใช้งาน"}
+                      {u.phone && ` · ${u.phone}`}
+                    </div>
+                    <div className="mt-1 flex gap-1.5 text-[11px]">
+                      {u.lineUserId && <span className="rounded-full bg-[#06c755]/15 px-2 py-0.5 font-bold text-[#06a347]">LINE</span>}
+                      {u.pending && <span className="rounded-full bg-cheese-soft px-2 py-0.5 font-bold text-warn">รออนุมัติ</span>}
                     </div>
                   </div>
                   <span className="text-xs text-brand group-open:hidden">แก้ไข</span>

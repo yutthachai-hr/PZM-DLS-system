@@ -48,9 +48,17 @@ model User {
   id           String        @id @default(cuid())
   name         String
   username     String        @unique
-  passwordHash String
+  /// null for LINE-only accounts (no password login)
+  passwordHash String?
   role         Role          @default(STAFF)
   active       Boolean       @default(true)
+  /// self sign-up waiting for a manager/admin
+  pending      Boolean       @default(false)
+  phone        String?
+  lineUserId   String?       @unique
+  linePicture  String?
+  approvedById String?
+  approvedAt   DateTime?
   branchId     String?
   branch       Branch?       @relation(fields: [branchId], references: [id])
   createdAt    DateTime      @default(now())
